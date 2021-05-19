@@ -17,7 +17,7 @@ reye = cv2.CascadeClassifier('haar cascade files\haarcascade_righteye_2splits.xm
 
 lbl=['Close','Open']
 
-model = load_model('models/cnncat2.h5')
+model = load_model('models/cnncat3.h5')
 path = os.getcwd()
 cap = cv2.VideoCapture(0)
 font = cv2.FONT_HERSHEY_COMPLEX_SMALL
@@ -37,7 +37,8 @@ while(True):
     left_eye = leye.detectMultiScale(gray)
     right_eye =  reye.detectMultiScale(gray)
 
-    cv2.rectangle(frame, (0,height-50) , (200,height) , (0,0,0) , thickness=cv2.FILLED )
+    cv2.rectangle(frame, (700,0) , (400,50) , (255,255,255) , thickness=cv2.FILLED )
+    cv2.rectangle(frame, (0,height-50) , (200,height) , (255,0,0) , thickness=cv2.FILLED )
 
     for (x,y,w,h) in faces:
         cv2.rectangle(frame, (x,y) , (x+w,y+h) , (100,100,100) , 1 )
@@ -50,10 +51,10 @@ while(True):
         r_eye= r_eye/255
         r_eye=  r_eye.reshape(24,24,-1)
         r_eye = np.expand_dims(r_eye,axis=0)
-        rpred = model.predict(r_eye,verbose=1)
-        if(rpred.any()==1):
+        rpred = model.predict_classes(r_eye)
+        if(rpred[0]==1):
             lbl='Open' 
-        if(rpred.any()==0):
+        if(rpred[0]==0):
             lbl='Closed'
         break
 
@@ -65,25 +66,25 @@ while(True):
         l_eye= l_eye/255
         l_eye=l_eye.reshape(24,24,-1)
         l_eye = np.expand_dims(l_eye,axis=0)
-        lpred = model.predict(l_eye,verbose=1)
-        if(lpred.any()==1):
+        lpred = model.predict_classes(l_eye)
+        if(lpred[0]==1):
             lbl='Open'   
-        if(lpred.any()==0):
+        if(lpred[0]==0):
             lbl='Closed'
         break
 
-    if(rpred.any()==0 and lpred.any()==0):
+    if(rpred[0]==0 and lpred[0]==0):
         score=score+1
-        cv2.putText(frame,"Closed",(10,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
+        cv2.putText(frame,"Eyes Closed!!",(450,30), font, 1,(0,0,255),1,cv2.LINE_AA)
     # if(rpred[0]==1 or lpred[0]==1):
     else:
         score=score-1
-        cv2.putText(frame,"Open",(10,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
+        cv2.putText(frame,"Eyes Open",(450,30), font, 1,(0,255,0),1,cv2.LINE_AA)
     
         
     if(score<0):
         score=0   
-    cv2.putText(frame,'Score:'+str(score),(100,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
+    cv2.putText(frame,'Score:'+str(score),(50,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
     if(score>15):
         #person is feeling sleepy so we beep the alarm
         cv2.imwrite(os.path.join(path,'image.jpg'),frame)
@@ -104,18 +105,3 @@ while(True):
         break
 cap.release()
 cv2.destroyAllWindows()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -22,8 +22,8 @@ VS = len(valid_batch.classes)//BS
 print(SPE,VS)
 
 
-img,labels= next(train_batch)
-print(img.shape)
+# img,labels= next(train_batch)
+# print(img.shape)
 
 model = Sequential([
     Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(24,24,1)),
@@ -52,9 +52,6 @@ model = Sequential([
 
 model.compile(optimizer='adam',loss='categorical_crossentropy',metrics=['accuracy'])
 
-model.fit_generator(train_batch, validation_data=valid_batch,epochs=20,steps_per_epoch=SPE ,validation_steps=VS)
+model.fit_generator(train_batch, validation_data=valid_batch,epochs=15,steps_per_epoch=SPE ,validation_steps=VS)
 
-model.save('models/cnnCat2.h5', overwrite=True)
-
-
-
+model.save('models/cnnCat3.h5', overwrite=True)
