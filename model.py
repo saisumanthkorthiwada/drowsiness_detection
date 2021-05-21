@@ -11,10 +11,9 @@ import random,shutil
 
 
 def generator(dir, gen=image.ImageDataGenerator(rescale=1./255), shuffle=True,batch_size=1,target_size=(24,24),class_mode='categorical' ):
-
     return gen.flow_from_directory(dir,batch_size=batch_size,shuffle=shuffle,color_mode='grayscale',class_mode=class_mode,target_size=target_size)
 
-BS= 32
+BS= 25
 TS=(24,24)
 train_batch= generator('data/train',shuffle=True, batch_size=BS,target_size=TS)
 valid_batch= generator('data/valid',shuffle=True, batch_size=BS,target_size=TS)
@@ -53,6 +52,24 @@ model = Sequential([
 
 model.compile(optimizer='adam',loss='categorical_crossentropy',metrics=['accuracy'])
 
-model.fit_generator(train_batch, validation_data=valid_batch,epochs=15,steps_per_epoch=SPE ,validation_steps=VS)
+history = model.fit_generator(train_batch, validation_data=valid_batch,epochs=10,steps_per_epoch=SPE ,validation_steps=VS)
 
 model.save('models/cnnCat3.h5', overwrite=True)
+
+#model.summary()
+
+accuracy = history.history['accuracy']
+val_accuracy = history.history['val_accuracy']
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+epochs = range(len(accuracy))
+
+plt.plot(epochs, accuracy, "b", label="training accuracy")
+plt.plot(epochs, val_accuracy, "r", label="validation accuracy")
+plt.legend()
+plt.show()
+
+plt.plot(epochs, loss, "b", label="training loss")
+plt.plot(epochs, val_loss, "r", label="validation loss")
+plt.legend()
+plt.show()
