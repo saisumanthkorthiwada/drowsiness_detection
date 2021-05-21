@@ -25,8 +25,8 @@ lpred=[-1]
 
 
 mixer.init()     #alarm sounds
-sound1 = mixer.Sound('alarm1.wav')
-sound2 = mixer.Sound('alarm2.wav')
+sound1 = mixer.Sound('alarms/alarm1.wav')
+sound2 = mixer.Sound('alarms/alarm2.wav')
 
 
 while(True):
