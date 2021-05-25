@@ -15,7 +15,7 @@ lbl=['Close', 'Open']        #The eyes can be either labelled as Closed or Open
 model = load_model('models/cnncat3.h5')     #loading the model from models directory
 
 cap = cv2.VideoCapture(0)
-font = cv2.FONT_HERSHEY_SIMPLEX
+font = cv2.FONT_HERSHEY_PLAIN
 count=0         #intial count and score are set to 0
 score=0
 thicc=2         #initial thickness is 2px
@@ -42,8 +42,8 @@ while(True):
     for (x,y,w,h) in faces:
         cv2.rectangle(frame, (x,y), (x+w,y+h), (100,100,100), 1 )
 
-    cv2.rectangle(frame, (700,0) , (400,50) , (255,255,255) , thickness=cv2.FILLED )
-    cv2.rectangle(frame, (0,height-50), (200,height), (255,0,0), thickness=cv2.FILLED )
+    cv2.rectangle(frame, (700,0) , (450,50) , (255,255,255) , thickness=cv2.FILLED )
+    cv2.rectangle(frame, (0,height-50), (150,height), (255,0,0), thickness=cv2.FILLED )
 
     for (x,y,w,h) in right_eye:
         r_eye = frame[y:y+h, x:x+w]
@@ -77,15 +77,15 @@ while(True):
 
     if(rpred[0]==0 and lpred[0]==0):
         score = score+1
-        cv2.putText(frame,"Eyes Closed!!",(450,30), font, 1,(0,0,255),1,cv2.LINE_AA)
+        cv2.putText(frame,"Eyes Closed!!",(500,30), font, 1,(0,0,255),1,cv2.LINE_AA)
     else:       #if(rpred[0]==1 or lpred[0]==1)
         score=score-1
-        cv2.putText(frame,"Eyes Open..",(450,30), font, 1,(0,255,0),1,cv2.LINE_AA)
+        cv2.putText(frame,"Eyes Open..",(500,30), font, 1,(0,255,0),1,cv2.LINE_AA)
     
         
     if(score<0):
         score=0   
-    cv2.putText(frame,'Score:'+str(score),(50,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
+    cv2.putText(frame,'Score:'+str(score),(30,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
     if(score<5):
         sound1.stop()
         sound2.stop()
