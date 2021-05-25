@@ -1,4 +1,4 @@
 # drowsiness_detection
 Driver Drowsiness Detection
 This is Drowsiness detection system.
-Changes are made.
+Made using CNN. It detects the drivers state and rings an alarm if the driver is found drowsy or sleepy.
